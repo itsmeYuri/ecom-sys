@@ -10,7 +10,7 @@
       --radius-lg: 20px;
       --radius-md: 14px;
       --shadow-soft: 0 10px 30px rgba(22, 17, 13, 0.08);
-      --container: 100%;
+      --container: 90%;
     }
 
     * { box-sizing: border-box; }
@@ -27,9 +27,8 @@
 
     .container {
       width: var(--container);
-      max-width: none;
-      margin: 0;
-      padding-inline: clamp(16px, 3vw, 48px);
+      margin: 0 auto;
+      padding-inline: clamp(14px, 2.5vw, 36px);
     }
 
     .navbar {
@@ -89,6 +88,7 @@
       place-items: center;
       background: #fff;
       cursor: pointer;
+      font-size: 11px;
     }
 
     .hero-wrap {
@@ -130,31 +130,30 @@
       font-weight: 600;
       font-size: 0.98rem;
       cursor: pointer;
+      display: inline-block;
     }
 
     .hero-image {
       height: 520px;
       width: min(100%, 520px);
-      justify-self: start;
+      justify-self: center;
       border-radius: 24px;
       overflow: hidden;
       box-shadow: var(--shadow-soft);
       position: relative;
+      background: #fff;
     }
 
     .hero-image img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center 0%;
+      object-position: center 8%;
       display: block;
     }
 
     .hero-image::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0) 42%, rgba(0,0,0,0.15) 100%);
+      content: none;
     }
 
     .brand-strip {
@@ -217,12 +216,17 @@
       gap: 20px;
     }
 
+    .card-link {
+      display: block;
+    }
+
     .card {
       background: var(--card);
       border-radius: 18px;
       overflow: hidden;
       box-shadow: var(--shadow-soft);
       border: 1px solid #eee7e2;
+      height: 100%;
     }
 
     .card-img {
@@ -332,45 +336,53 @@
     .newsletter-box {
       background: #131313;
       color: #fff;
-      border-radius: 20px;
-      padding: 30px;
+      border-radius: 22px;
+      padding: 30px 28px;
       display: grid;
-      grid-template-columns: 1.1fr 1fr;
-      gap: 24px;
+      grid-template-columns: minmax(360px, 1fr) minmax(420px, 520px);
+      gap: 26px;
       align-items: center;
     }
 
     .newsletter-box h3 {
       margin: 0;
-      font-size: clamp(1.25rem, 3vw, 2rem);
-      line-height: 1.2;
+      font-size: clamp(1.45rem, 1.9vw, 2.45rem);
+      line-height: 1.12;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      max-width: none;\n      white-space: nowrap;
     }
 
     .newsletter-form {
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+      gap: 12px;
       justify-content: flex-end;
+      align-items: center;
     }
 
     .newsletter-form input {
-      flex: 1;
-      min-width: 220px;
-      border: 1px solid #3a3a3a;
+      flex: 1 1 auto;
+      min-width: 260px;
+      border: 1px solid #e9e9e9;
       background: #fff;
-      border-radius: 12px;
-      padding: 13px 14px;
+      border-radius: 13px;
+      padding: 0 18px;
+      height: 50px;
+      font-size: 1.05rem;
       font-family: inherit;
     }
 
     .newsletter-form button {
       border: 0;
-      padding: 13px 20px;
-      border-radius: 12px;
+      padding: 0 24px;
+      height: 50px;
+      border-radius: 13px;
       background: #fff;
       color: #111;
       font-weight: 600;
+      font-size: 1.05rem;
       cursor: pointer;
+      white-space: nowrap;
     }
 
     footer {
@@ -418,7 +430,7 @@
 
     @media (max-width: 1024px) {
       .hero { grid-template-columns: 1fr; padding: 48px 30px; }
-      .hero-image { height: 420px; width: 100%; justify-self: stretch; }
+      .hero-image { height: 420px; width: min(100%, 420px); }
       .products { grid-template-columns: repeat(2, 1fr); }
       .stats-grid { grid-template-columns: 1fr; }
       .stats-item { border-right: 0; border-bottom: 1px solid var(--border); }
@@ -427,6 +439,8 @@
       .newsletter-box { grid-template-columns: 1fr; }
       .newsletter-form { justify-content: flex-start; }
       .footer-grid { grid-template-columns: repeat(2, 1fr); }
+      .newsletter-box { padding: 22px; gap: 14px; }
+      .newsletter-box h3 { white-space: normal; }
     }
 
     @media (max-width: 700px) {
@@ -435,5 +449,6 @@
       .products { grid-template-columns: 1fr; }
       .styles-grid { grid-template-columns: 1fr; }
       .footer-grid { grid-template-columns: 1fr; }
-      .hero-image { height: 360px; width: 100%; }
+      .hero-image { height: 360px; }
     }
+

@@ -1,254 +1,73 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Title</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css" />
+  <title>Threap Glailz</title>
+  <style>
+    :root { color-scheme: light; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      color: #111;
+    }
+    .card {
+      width: min(760px, 92vw);
+      background: #fff;
+      border: 1px solid #e8e8e8;
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.06);
+    }
+    h1 { margin: 0 0 8px; font-size: 1.6rem; }
+    p { margin: 0 0 16px; color: #555; }
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    a {
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid #d7d7d7;
+      color: #111;
+      font-weight: 600;
+      font-size: .92rem;
+      background: #fff;
+    }
+    a.primary { background: #111; color: #fff; border-color: #111; }
+    .small { margin-top: 12px; font-size: .85rem; color: #666; }
+  </style>
+  <script>
+    (function () {
+      var appUrl = '/shop-system/index.php';
+      if (window.location.protocol.startsWith('http')) {
+        window.location.replace(appUrl);
+      }
+    })();
+  </script>
 </head>
 <body>
-  <header class="navbar">
-    <div class="container nav-inner">
-      <div class="logo">
-        <span>Threap Glailz</span>
-      </div>
-      <nav class="nav-links">
-        <a href="#">New In</a>
-        <a href="#">T-Shirt</a>
-        <a href="#">Jorts</a>
-        <a href="#">footWare</a>
-        <a href="#">Sale</a>
-      </nav>
-      <div class="nav-actions" aria-label="Search and cart actions">
-        <button class="icon-btn" aria-label="Search">search logo</button>
-        <button class="icon-btn" aria-label="Shopping cart">cart logo</button>
-      </div>
+  <div class="card">
+    <h1>Threap Glailz Connected</h1>
+    <p>This `index.html` is connected to your dynamic PHP + MySQL e-commerce system.</p>
+    <div class="links">
+      <a class="primary" href="/shop-system/index.php">Open Store</a>
+      <a href="/shop-system/shop.php">Shop Page</a>
+      <a href="/shop-system/cart.php">Cart</a>
+      <a href="/shop-system/login.php">Login</a>
+      <a href="/shop-system/register.php">Register</a>
+      <a href="/shop-system/admin/login.php">Admin</a>
     </div>
-  </header>
-
-  <main>
-    <div class="container hero-wrap">
-      <section class="hero">
-        <div>
-          <h1>FIND CLOTHES THAT MATCHES YOUR STYLE</h1>
-          <p>Browse unique vintage finds and budget-friendly treasures made for everyday confidence. Discover one-of-a-kind pieces, timeless classics, and hidden gems curated to elevate your personal look — sustainably and affordably.</p>
-          <button class="btn-dark">Shop Now</button>
-        </div>
-        <div class="hero-image">
-          <img src="./images/Model/model.png" alt="Fashion model couple wearing modern outfits" />
-        </div>
-      </section>
+    <div class="small">
+      If this page does not redirect, open it through XAMPP Apache: <strong>http://localhost/</strong>
     </div>
-
-    <div class="brand-strip">
-      <div class="container brand-row">
-        <span>Champion</span>
-        <span>Levi’s</span>
-        <span>Nike</span>
-        <span>Adidas</span>
-        <span>Tommy Hilfiger</span>
-      </div>
-    </div>
-
-    <section class="stats">
-      <div class="container stats-grid">
-        <div class="stats-item"><strong>200+</strong><span>International Brands</span></div>
-        <div class="stats-item"><strong>2,000+</strong><span>High-Quality Products</span></div>
-        <div class="stats-item"><strong>30,000+</strong><span>Happy Customers</span></div>
-      </div>
-    </section>
-
-    <section>
-      <div class="container">
-        <h2 class="section-title">NEW ARRIVALS</h2>
-        <div class="products">
-          <article class="card">
-            <img class="card-img" src="" alt="no photo ngani bai" />
-            <div class="card-body">
-              <h3 class="card-title">ITEM1</h3>
-              <div class="rating">★★★★★ 4.8</div>
-              <div class="price"><span class="new">₱120</span><span class="old">₱150</span></div>
-            </div>
-          </article>
-          <article class="card">
-            <img class="card-img" src="" alt="no photo ngani bai" />
-            <div class="card-body">
-              <h3 class="card-title">ITEM2</h3>
-              <div class="rating">★★★★☆ 4.3</div>
-              <div class="price"><span class="new">₱240</span><span class="old">₱320</span></div>
-            </div>
-          </article>
-          <article class="card">
-            <img class="card-img" src="" alt="no photo ngani bai" />
-            <div class="card-body">
-              <h3 class="card-title">ITEM3</h3>
-              <div class="rating">★★★★☆ 4.5</div>
-              <div class="price"><span class="new">₱180</span><span class="old">₱210</span></div>
-            </div>
-          </article>
-          <article class="card">
-            <img class="card-img" src="" alt="no photo ngani bai" />
-            <div class="card-body">
-              <h3 class="card-title">ITEM4</h3>
-              <div class="rating">★★★★★ 4.9</div>
-              <div class="price"><span class="new">₱130</span><span class="old">₱160</span></div>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <div class="container">
-        <h2 class="section-title">TOP SELLING</h2>
-        <div class="products">
-          <article class="card">
-            <img class="card-img" src="" alt="no photo ngani bai" />
-            <div class="card-body">
-              <h3 class="card-title">ITEM5</h3>
-              <div class="rating">★★★★★ 4.7</div>
-              <div class="price"><span class="new">₱212</span><span class="old">₱245</span></div>
-            </div>
-          </article>
-          <article class="card">
-            <img class="card-img" src="" alt="no photo ngani bai" />
-            <div class="card-body">
-              <h3 class="card-title">ITEM6</h3>
-              <div class="rating">★★★★☆ 4.2</div>
-              <div class="price"><span class="new">₱145</span><span class="old">₱175</span></div>
-            </div>
-          </article>
-          <article class="card">
-            <img class="card-img" src="" alt="no photo ngani bai" />
-            <div class="card-body">
-              <h3 class="card-title">ITEM7</h3>
-              <div class="rating">★★★★☆ 4.1</div>
-              <div class="price"><span class="new">₱80</span><span class="old">₱96</span></div>
-            </div>
-          </article>
-          <article class="card">
-            <img class="card-img" src="" alt="no photo ngani bai" />
-            <div class="card-body">
-              <h3 class="card-title">ITEM8</h3>
-              <div class="rating">★★★★★ 4.9</div>
-              <div class="price"><span class="new">₱190</span><span class="old">₱220</span></div>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <div class="container styles-wrap">
-        <h2 class="section-title">BROWSE BY DRESS STYLE</h2>
-        <div class="styles-grid">
-          <div class="style-card">
-            <img src="" alt="TYPE" />
-            <span>TYPE</span>
-          </div>
-          <div class="style-card">
-            <img src="" alt="TYPE" />
-            <span>TYPE</span>
-          </div>
-          <div class="style-card">
-            <img src="" alt="TYPE" />
-            <span>TYPE</span>
-          </div>
-          <div class="style-card">
-            <img src="" alt="TYPE" />
-            <span>TYPE</span>
-          </div>
-          <div class="style-card">
-            <img src="" alt="TYPE" />
-            <span>TYPE</span>
-          </div>
-          <div class="style-card">
-            <img src="" alt="TYPE" />
-            <span>TYPE</span>
-          </div>
-        </div>
-      </div>
-    </section>
-<!--
-    <section>
-      <div class="container">
-        <h2 class="section-title">OUR HAPPY CUSTOMERS</h2>
-        <div class="testimonials">
-          <article class="review">
-            <div class="rating">★★★★★</div>
-            <h4>Sarah M.</h4>
-            <p>The quality feels premium and the fit is exactly what I wanted. The pieces are stylish but still wearable daily.</p>
-          </article>
-          <article class="review">
-            <div class="rating">★★★★★</div>
-            <h4>Alex K.</h4>
-            <p>Shipping was fast and the materials exceeded my expectations. SHOP.CO has become my go-to for essentials.</p>
-          </article>
-          <article class="review">
-            <div class="rating">★★★★☆</div>
-            <h4>James L.</h4>
-            <p>Excellent collection and clean modern cuts. Everything from checkout to delivery felt smooth and premium.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-    -->
-
-    <section class="newsletter">
-      <div class="container newsletter-box">
-        <h3>STAY UP TO DATE ABOUT OUR LATEST OFFERS</h3>
-        <form class="newsletter-form" onsubmit="event.preventDefault()">
-          <input type="email" placeholder="Enter your email address" aria-label="Email address" />
-          <button type="submit">Subscribe</button>
-        </form>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container footer-grid">
-      <div class="footer-col">
-        <h5>Threap Glailz</h5>
-        <p>We handpick stylish thrift finds that look premium without the premium price.</p>
-        <div class="socials" aria-label="Social media links">
-          <span>in</span>
-          <span>ig</span>
-          <span>fb</span>
-          <span>x</span>
-        </div>
-      </div>
-      <div class="footer-col">
-        <h5>Company</h5>
-        <a href="#">About</a>
-        <a href="#">Features</a>
-        <a href="#">Works</a>
-        <a href="#">Career</a>
-      </div>
-      <div class="footer-col">
-        <h5>Help</h5>
-        <a href="#">Customer Support</a>
-        <a href="#">Delivery Details</a>
-        <a href="#">Terms & Conditions</a>
-        <a href="#">Privacy Policy</a>
-      </div>
-      <div class="footer-col">
-        <h5>FAQ</h5>
-        <a href="#">Account</a>
-        <a href="#">Manage Deliveries</a>
-        <a href="#">Orders</a>
-        <a href="#">Payments</a>
-      </div>
-      <div class="footer-col">
-        <h5>Resources</h5>
-        <a href="#">Free eBooks</a>
-        <a href="#">Development Tutorial</a>
-        <a href="#">How to Blog</a>
-        <a href="#">YouTube Playlist</a>
-      </div>
-    </div>
-  </footer>
+  </div>
 </body>
 </html>
