@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once __DIR__ . '/db.php';
 
 function e(string $value): string {
@@ -15,7 +15,7 @@ function current_user(): ?array {
 
 function require_login(): void {
     if (!is_logged_in()) {
-        $returnTo = urlencode($_SERVER['REQUEST_URI'] ?? (BASE_URL . '/index.php'));
+        $returnTo = urlencode($_SERVER['REQUEST_URI'] ?? (BASE_URL . '/homepage.php'));
         header('Location: ' . BASE_URL . '/login.php?return_to=' . $returnTo);
         exit;
     }
@@ -103,5 +103,6 @@ function calculate_cart_totals(array $products): array {
 function render_stars(float $rating): string {
     $full = (int)round($rating);
     $full = max(0, min(5, $full));
-    return str_repeat('★', $full) . str_repeat('☆', 5 - $full);
+    return str_repeat('â˜…', $full) . str_repeat('â˜†', 5 - $full);
 }
+

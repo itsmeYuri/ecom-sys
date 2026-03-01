@@ -1,8 +1,8 @@
-<?php
+﻿<?php
 require_once __DIR__ . '/includes/functions.php';
 
 if (is_logged_in()) {
-    header('Location: ' . BASE_URL . '/index.php');
+    header('Location: ' . BASE_URL . '/homepage.php');
     exit;
 }
 
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'email' => $user['email'],
             'phone' => $user['phone'],
         ];
-        $fallback = BASE_URL . '/index.php';
+        $fallback = BASE_URL . '/homepage.php';
         if ($returnTo !== '' && substr($returnTo, 0, 1) === '/') {
             header('Location: ' . $returnTo);
         } else {
@@ -60,3 +60,4 @@ include __DIR__ . '/header.php';
     </div>
 </div>
 <?php include __DIR__ . '/footer.php'; ?>
+

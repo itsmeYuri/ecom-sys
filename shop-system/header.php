@@ -30,7 +30,7 @@ $categoriesNav = get_categories();
 <?php if (!$isEmbeddedView): ?>
 <header class="sticky-top bg-white main-header">
     <nav class="container navbar navbar-expand-lg py-3">
-        <a class="navbar-brand fw-bold" href="<?= BASE_URL ?>/index.php">Threap Glailz</a>
+        <a class="navbar-brand fw-bold" href="<?= BASE_URL ?>/homepage.php">Threap Glailz</a>
         <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#mainNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -63,3 +63,4 @@ $categoriesNav = get_categories();
 <?php foreach (get_flashes() as $flash): ?>
     <div class="alert alert-<?= e($flash['type']) ?>"><?= e($flash['message']) ?></div>
 <?php endforeach; ?>
+

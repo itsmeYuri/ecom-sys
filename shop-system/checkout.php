@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once __DIR__ . '/includes/functions.php';
 require_login();
 
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $_SESSION['cart'] = [];
     flash('success', 'Order placed successfully. Order ID #' . $orderId);
-    header('Location: ' . BASE_URL . '/index.php');
+    header('Location: ' . BASE_URL . '/homepage.php');
     exit;
 }
 
@@ -77,3 +77,4 @@ include __DIR__ . '/header.php';
     </div>
 </div>
 <?php include __DIR__ . '/footer.php'; ?>
+
