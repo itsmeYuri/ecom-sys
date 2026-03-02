@@ -5,6 +5,15 @@ require_admin();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
+    if ($action === 'toggle_sold') {
+        $id = (int)($_POST['id'] ?? 0);
+        $sold = (int)($_POST['is_sold'] ?? 0) === 1 ? 1 : 0;
+        if ($id > 0) {
+            db()->prepare('UPDATE products SET is_sold = ? WHERE id = ?')->execute([$sold, $id]);
+            flash('success', $sold ? 'Product marked as sold.' : 'Product marked as available.');
+        }
+    }
+
     if ($action === 'delete') {
         $id = (int)($_POST['id'] ?? 0);
         if ($id > 0) {
@@ -23,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $colors = trim($_POST['colors'] ?? '');
         $sizes = trim($_POST['sizes'] ?? '');
         $popular = isset($_POST['is_popular']) ? 1 : 0;
+        $isSold = isset($_POST['is_sold']) ? 1 : 0;
         $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name), '-'));
 
         if ($name === '' || $categoryId < 1 || $price <= 0 || $description === '') {
@@ -32,12 +42,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($action === 'add') {
-            $stmt = db()->prepare('INSERT INTO products (category_id, name, slug, description, price, old_price, colors, sizes, is_popular) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
-            $stmt->execute([$categoryId, $name, $slug . '-' . time(), $description, $price, $oldPrice, $colors, $sizes, $popular]);
+            $stmt = db()->prepare('INSERT INTO products (category_id, name, slug, description, price, old_price, colors, sizes, is_popular, is_sold) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+            $stmt->execute([$categoryId, $name, $slug . '-' . time(), $description, $price, $oldPrice, $colors, $sizes, $popular, $isSold]);
             $id = (int)db()->lastInsertId();
         } else {
-            $stmt = db()->prepare('UPDATE products SET category_id=?, name=?, description=?, price=?, old_price=?, colors=?, sizes=?, is_popular=? WHERE id=?');
-            $stmt->execute([$categoryId, $name, $description, $price, $oldPrice, $colors, $sizes, $popular, $id]);
+            $stmt = db()->prepare('UPDATE products SET category_id=?, name=?, description=?, price=?, old_price=?, colors=?, sizes=?, is_popular=?, is_sold=? WHERE id=?');
+            $stmt->execute([$categoryId, $name, $description, $price, $oldPrice, $colors, $sizes, $popular, $isSold, $id]);
         }
 
         if (!empty($_FILES['images']['name'][0])) {
@@ -100,7 +110,8 @@ include __DIR__ . '/../header.php';
                 <div class="mb-2"><input class="form-control" name="sizes" placeholder="Sizes comma separated" value="<?= e($editProduct['sizes'] ?? '') ?>"></div>
                 <div class="mb-2"><textarea class="form-control" name="description" rows="3" placeholder="Description" required><?= e($editProduct['description'] ?? '') ?></textarea></div>
                 <div class="mb-2"><input class="form-control" type="file" name="images[]" multiple></div>
-                <div class="form-check mb-3"><input class="form-check-input" type="checkbox" name="is_popular" id="isPopular" <?= !empty($editProduct['is_popular']) ? 'checked' : '' ?>><label for="isPopular" class="form-check-label">Most Popular</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" name="is_popular" id="isPopular" <?= !empty($editProduct['is_popular']) ? 'checked' : '' ?>><label for="isPopular" class="form-check-label">Most Popular</label></div>
+                <div class="form-check mb-3"><input class="form-check-input" type="checkbox" name="is_sold" id="isSold" <?= !empty($editProduct['is_sold']) ? 'checked' : '' ?>><label for="isSold" class="form-check-label">Mark as Sold</label></div>
                 <button class="btn btn-dark w-100">Save Product</button>
             </form>
         </div>
@@ -108,7 +119,7 @@ include __DIR__ . '/../header.php';
     <div class="col-lg-8">
         <div class="detail-box p-3">
             <table class="table table-sm">
-                <thead><tr><th>ID</th><th>Name</th><th>Category</th><th>Price</th><th></th></tr></thead>
+                <thead><tr><th>ID</th><th>Name</th><th>Category</th><th>Price</th><th>Status</th><th></th></tr></thead>
                 <tbody>
                     <?php foreach ($products as $p): ?>
                         <tr>
@@ -116,7 +127,20 @@ include __DIR__ . '/../header.php';
                             <td><?= e($p['name']) ?></td>
                             <td><?= e($p['category_name']) ?></td>
                             <td>$<?= number_format((float)$p['price'], 2) ?></td>
+                            <td>
+                                <?php if (!empty($p['is_sold'])): ?>
+                                    <span class="badge text-bg-danger">SOLD</span>
+                                <?php else: ?>
+                                    <span class="badge text-bg-success">AVAILABLE</span>
+                                <?php endif; ?>
+                            </td>
                             <td class="text-end">
+                                <form method="post" class="d-inline">
+                                    <input type="hidden" name="action" value="toggle_sold">
+                                    <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
+                                    <input type="hidden" name="is_sold" value="<?= !empty($p['is_sold']) ? '0' : '1' ?>">
+                                    <button class="btn btn-sm btn-outline-secondary"><?= !empty($p['is_sold']) ? 'Mark Available' : 'Mark Sold' ?></button>
+                                </form>
                                 <a href="?edit=<?= (int)$p['id'] ?>" class="btn btn-sm btn-outline-dark">Edit</a>
                                 <form method="post" class="d-inline" onsubmit="return confirm('Delete product?')">
                                     <input type="hidden" name="action" value="delete">

@@ -1,6 +1,26 @@
 ﻿<?php
 require_once __DIR__ . '/db.php';
 
+function ensure_products_sold_column(): void {
+    static $checked = false;
+    if ($checked) {
+        return;
+    }
+    $checked = true;
+
+    try {
+        $stmt = db()->query("SHOW COLUMNS FROM products LIKE 'is_sold'");
+        $exists = $stmt->fetch();
+        if (!$exists) {
+            db()->exec("ALTER TABLE products ADD COLUMN is_sold TINYINT(1) NOT NULL DEFAULT 0 AFTER is_popular");
+        }
+    } catch (Throwable $e) {
+        // Keep app running even if schema migration is blocked.
+    }
+}
+
+ensure_products_sold_column();
+
 function e(string $value): string {
     return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
 }
@@ -27,7 +47,8 @@ function is_admin_logged_in(): bool {
 
 function require_admin(): void {
     if (!is_admin_logged_in()) {
-        header('Location: ' . BASE_URL . '/admin/login.php');
+        $returnTo = urlencode($_SERVER['REQUEST_URI'] ?? (BASE_URL . '/admin/index.php'));
+        header('Location: ' . BASE_URL . '/login.php?return_to=' . $returnTo);
         exit;
     }
 }

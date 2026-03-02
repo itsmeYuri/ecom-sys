@@ -8,6 +8,15 @@ if ($productId < 1) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'add_to_cart') {
+    $soldCheck = db()->prepare('SELECT is_sold FROM products WHERE id = ? LIMIT 1');
+    $soldCheck->execute([$productId]);
+    $soldRow = $soldCheck->fetch();
+    if (!empty($soldRow['is_sold'])) {
+        flash('warning', 'This item is marked as sold and cannot be added to cart.');
+        header('Location: ' . BASE_URL . '/product.php?id=' . $productId);
+        exit;
+    }
+
     $qty = max(1, (int)($_POST['quantity'] ?? 1));
     $_SESSION['cart'][$productId] = ($_SESSION['cart'][$productId] ?? 0) + $qty;
     flash('success', 'Product added to cart.');
@@ -52,7 +61,11 @@ include __DIR__ . '/header.php';
             <img class="gallery-main" src="<?= e($images[0]['image_path'] ?? (BASE_URL . '/assets/images/model.png')) ?>" alt="<?= e($product['name']) ?>">
         </div>
         <div class="col-lg-6">
-            <h1 class="h2 fw-bold mb-2"><?= e(strtoupper($product['name'])) ?></h1>
+            <h1 class="h2 fw-bold mb-2"><?= e(strtoupper($product['name'])) ?>
+                <?php if (!empty($product['is_sold'])): ?>
+                    <span class="badge text-bg-danger align-middle">SOLD</span>
+                <?php endif; ?>
+            </h1>
             <div class="rating mb-2"><?= e(render_stars((float)$product['rating'])) ?> <?= e((string)$product['rating']) ?>/5</div>
             <h3 class="mb-2 fw-bold">$<?= number_format((float)$product['price'], 0) ?>
                 <?php if (!empty($product['old_price'])): ?>
@@ -72,15 +85,19 @@ include __DIR__ . '/header.php';
                 <?php endforeach; ?>
             </div>
 
-            <form method="post" class="d-flex flex-wrap gap-2 align-items-center">
-                <input type="hidden" name="action" value="add_to_cart">
-                <div class="qty-compact">
-                    <button type="button">-</button>
-                    <input type="number" min="1" name="quantity" value="1">
-                    <button type="button">+</button>
-                </div>
-                <button class="btn btn-dark px-5">Add to Cart</button>
-            </form>
+            <?php if (!empty($product['is_sold'])): ?>
+                <button class="btn btn-secondary px-5" disabled>Sold Out</button>
+            <?php else: ?>
+                <form method="post" class="d-flex flex-wrap gap-2 align-items-center">
+                    <input type="hidden" name="action" value="add_to_cart">
+                    <div class="qty-compact">
+                        <button type="button">-</button>
+                        <input type="number" min="1" name="quantity" value="1">
+                        <button type="button">+</button>
+                    </div>
+                    <button class="btn btn-dark px-5">Add to Cart</button>
+                </form>
+            <?php endif; ?>
         </div>
     </div>
 

@@ -4,7 +4,11 @@ require_once __DIR__ . '/includes/functions.php';
 $isEmbeddedView = (($_GET['embed'] ?? '') === '1')
     || (strtolower($_SERVER['HTTP_SEC_FETCH_DEST'] ?? '') === 'iframe');
 
-$showPromoBar = !is_logged_in() && empty($_SESSION['promo_dismissed']);
+$isUserLoggedIn = is_logged_in();
+$isAdminLoggedIn = is_admin_logged_in();
+
+// Always show promo bar when no customer session exists.
+$showPromoBar = !$isUserLoggedIn;
 $categoriesNav = get_categories();
 ?>
 <!doctype html>
@@ -46,9 +50,12 @@ $categoriesNav = get_categories();
             </form>
             <div class="d-flex align-items-center gap-2 nav-actions">
                 <a href="<?= BASE_URL ?>/cart.php" class="icon-link" title="Cart">&#128722;<span class="cart-count"><?= cart_items_count() ?></span></a>
-                <?php if (is_logged_in()): ?>
+                <?php if ($isUserLoggedIn): ?>
                     <a href="<?= BASE_URL ?>/profile.php" class="icon-link" title="My Profile">&#128100;</a>
                     <a href="<?= BASE_URL ?>/logout.php" class="icon-link" title="Logout">&#10140;</a>
+                <?php elseif ($isAdminLoggedIn): ?>
+                    <a href="<?= BASE_URL ?>/admin/index.php" class="icon-link" title="Admin Dashboard">&#128100;</a>
+                    <a href="<?= BASE_URL ?>/admin/logout.php" class="icon-link" title="Admin Logout">&#10140;</a>
                 <?php else: ?>
                     <a href="<?= BASE_URL ?>/login.php" class="icon-link" title="Login">&#128100;</a>
                 <?php endif; ?>

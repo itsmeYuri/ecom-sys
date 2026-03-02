@@ -82,7 +82,7 @@ function index_stars(float $rating): string {
               <article class="card">
                 <img class="card-img" src="<?= e($product['image_path'] ?: (BASE_URL . '/assets/images/model1.png')) ?>" alt="<?= e($product['name']) ?>" />
                 <div class="card-body">
-                  <h3 class="card-title"><?= e($product['name']) ?></h3>
+                  <h3 class="card-title"><?= e($product['name']) ?> <?php if (!empty($product['is_sold'])): ?><span style="color:#b91c1c;font-size:.76rem;">SOLD</span><?php endif; ?></h3>
                   <div class="rating"><?= e(index_stars((float)$product['rating'])) ?> <?= e((string)$product['rating']) ?></div>
                   <div class="price"><span class="new">$<?= number_format((float)$product['price'], 0) ?></span><?php if (!empty($product['old_price'])): ?><span class="old">$<?= number_format((float)$product['old_price'], 0) ?></span><?php endif; ?></div>
                 </div>
@@ -102,7 +102,7 @@ function index_stars(float $rating): string {
               <article class="card">
                 <img class="card-img" src="<?= e($product['image_path'] ?: (BASE_URL . '/assets/images/model1.png')) ?>" alt="<?= e($product['name']) ?>" />
                 <div class="card-body">
-                  <h3 class="card-title"><?= e($product['name']) ?></h3>
+                  <h3 class="card-title"><?= e($product['name']) ?> <?php if (!empty($product['is_sold'])): ?><span style="color:#b91c1c;font-size:.76rem;">SOLD</span><?php endif; ?></h3>
                   <div class="rating"><?= e(index_stars((float)$product['rating'])) ?> <?= e((string)$product['rating']) ?></div>
                   <div class="price"><span class="new">$<?= number_format((float)$product['price'], 0) ?></span><?php if (!empty($product['old_price'])): ?><span class="old">$<?= number_format((float)$product['old_price'], 0) ?></span><?php endif; ?></div>
                 </div>
