@@ -28,4 +28,13 @@ define('DB_USER', 'root');
 define('DB_PASS', '');
 define('BASE_URL', '/shop-system');
 
+// SMTP configuration for OTP email sending (PHPMailer)
+define('SMTP_HOST', 'smtp.gmail.com');
+define('SMTP_PORT', 587);
+define('SMTP_USERNAME', 'darryljohn020@gmail.com');
+define('SMTP_PASSWORD', 'vngp dgcy iips jjbh');
+define('SMTP_ENCRYPTION', 'tls'); // tls or ssl
+define('SMTP_FROM_EMAIL', 'darryljohn020@gmail.com');
+define('SMTP_FROM_NAME', 'Threap Glailz');
+
 date_default_timezone_set('Asia/Manila');

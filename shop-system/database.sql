@@ -8,6 +8,8 @@ DROP TABLE IF EXISTS reviews;
 DROP TABLE IF EXISTS product_images;
 DROP TABLE IF EXISTS products;
 DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS otp_codes;
+DROP TABLE IF EXISTS employees;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS admin;
 
@@ -17,15 +19,39 @@ CREATE TABLE users (
     email VARCHAR(150) UNIQUE NULL,
     phone VARCHAR(25) UNIQUE NULL,
     password_hash VARCHAR(255) NOT NULL,
+    is_verified TINYINT(1) NOT NULL DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_users_email (email),
     INDEX idx_users_phone (phone)
 );
 
+CREATE TABLE otp_codes (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    entity_type ENUM('user','admin','employee') NOT NULL,
+    entity_id INT UNSIGNED NOT NULL,
+    purpose ENUM('login','email_verify') NOT NULL,
+    code_hash VARCHAR(255) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    consumed_at DATETIME NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_otp_lookup (entity_type, entity_id, purpose, consumed_at, expires_at)
+);
+
 CREATE TABLE admin (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(150) UNIQUE NULL,
     username VARCHAR(80) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE employees (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(120) NOT NULL,
+    username VARCHAR(80) NOT NULL UNIQUE,
+    email VARCHAR(150) UNIQUE NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -61,7 +87,10 @@ CREATE TABLE products (
 CREATE TABLE product_images (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     product_id INT UNSIGNED NOT NULL,
-    image_path VARCHAR(255) NOT NULL,
+    image_data LONGBLOB NULL,
+    image_mime VARCHAR(100) NULL,
+    image_name VARCHAR(255) NULL,
+    image_path VARCHAR(255) NULL,
     is_main TINYINT(1) DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_images_product FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
@@ -124,8 +153,11 @@ CREATE TABLE order_items (
     INDEX idx_order_items_order (order_id)
 );
 
-INSERT INTO admin (username, password_hash) VALUES
-('admin', '$2y$10$Us5MxKC1tKtxA7zM8Bi/IOG55k3BktRVbFuKXlAdCGXg/mIQW0j8C');
+INSERT INTO admin (email, username, password_hash) VALUES
+('admin@example.com', 'admin', '$2y$10$Us5MxKC1tKtxA7zM8Bi/IOG55k3BktRVbFuKXlAdCGXg/mIQW0j8C');
+
+INSERT INTO employees (full_name, username, email, password_hash, is_active) VALUES
+('System Employee', 'employee', 'employee@example.com', '$2y$10$k6yzwa0vrWtqZH8xF86y3utwOlWAgyHqCfLhHT1oIyZrxQq95Ps4O', 1);
 
 INSERT INTO categories (name, slug) VALUES
 ('T-Shirts', 't-shirts'),
@@ -134,8 +166,8 @@ INSERT INTO categories (name, slug) VALUES
 ('Shorts', 'shorts'),
 ('Hoodies', 'hoodies');
 
-INSERT INTO users (full_name, email, phone, password_hash) VALUES
-('Sample User', 'user@example.com', NULL, '$2y$10$BnuTapX2wtO1LE0IPEjgvOVxlbYNLn9cJIu6If/fWMxjLsBP2OQQq');
+INSERT INTO users (full_name, email, phone, password_hash, is_verified) VALUES
+('Sample User', 'user@example.com', NULL, '$2y$10$BnuTapX2wtO1LE0IPEjgvOVxlbYNLn9cJIu6If/fWMxjLsBP2OQQq', 1);
 
 INSERT INTO products (category_id, name, slug, description, price, old_price, rating, stock, colors, sizes, is_popular) VALUES
 (1, 'Gradient Graphic T-shirt', 'gradient-graphic-tshirt', 'Premium cotton tee with vibrant gradient print and breathable fabric.', 145.00, 165.00, 3.5, 120, 'White,Blue,Pink', 'S,M,L,XL', 1),
@@ -149,19 +181,7 @@ INSERT INTO products (category_id, name, slug, description, price, old_price, ra
 (4, 'Loose Fit Bermuda Shorts', 'loose-fit-bermuda-shorts', 'Relaxed bermuda shorts made for hot weather comfort.', 80.00, NULL, 3.0, 95, 'Blue,Gray', 'M,L,XL', 0),
 (1, 'One Life Graphic T-shirt', 'one-life-graphic-tshirt', 'Soft premium tee featuring One Life graphic with washed finish.', 260.00, 300.00, 4.7, 45, 'Brown,Black,Gray', 'S,M,L,XL', 1);
 
-INSERT INTO product_images (product_id, image_path, is_main) VALUES
-(1, '/shop-system/assets/images/model1.png', 1),
-(1, '/shop-system/assets/images/model.png', 0),
-(2, '/shop-system/assets/images/model.png', 1),
-(2, '/shop-system/assets/images/model1.png', 0),
-(3, '/shop-system/assets/images/model1.png', 1),
-(4, '/shop-system/assets/images/model.png', 1),
-(5, '/shop-system/assets/images/model1.png', 1),
-(6, '/shop-system/assets/images/model.png', 1),
-(7, '/shop-system/assets/images/model1.png', 1),
-(8, '/shop-system/assets/images/model.png', 1),
-(9, '/shop-system/assets/images/model1.png', 1),
-(10, '/shop-system/assets/images/model.png', 1);
+-- product_images are stored as blobs (image_data) after upload/import.
 
 INSERT INTO reviews (product_id, user_id, reviewer_name, rating, comment) VALUES
 (10, 1, 'Samantha D.', 5, 'Very comfortable fit and premium fabric feel. Worth the price.'),

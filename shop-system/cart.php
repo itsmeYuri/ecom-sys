@@ -34,7 +34,7 @@ include __DIR__ . '/header.php';
                 <?php foreach ($products as $item): ?>
                     <div class="row g-3 align-items-center border-bottom py-3">
                         <div class="col-3 col-md-2">
-                            <img class="cart-item-img" src="<?= e($item['image_path'] ?: (BASE_URL . '/assets/images/model1.png')) ?>" alt="<?= e($item['name']) ?>">
+                            <img class="cart-item-img" src="<?= e(image_url(isset($item['image_id']) ? (int)$item['image_id'] : 0, BASE_URL . '/assets/images/model1.png')) ?>" alt="<?= e($item['name']) ?>">
                         </div>
                         <div class="col-9 col-md-5">
                             <h5 class="h6 mb-1 fw-bold"><?= e($item['name']) ?></h5>

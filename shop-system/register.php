@@ -15,8 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($fullName === '') {
         flash('danger', 'Full name is required.');
-    } elseif ($email === '' && $phone === '') {
-        flash('danger', 'Either email or phone is required.');
+    } elseif ($email === '') {
+        flash('danger', 'Email is required for OTP verification.');
     } elseif ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         flash('danger', 'Invalid email format.');
     } elseif ($phone !== '' && !preg_match('/^[0-9+\-\s]{8,20}$/', $phone)) {
@@ -31,10 +31,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($check->fetch()) {
             flash('danger', 'Email or phone already exists.');
         } else {
-            $stmt = db()->prepare('INSERT INTO users (full_name, email, phone, password_hash) VALUES (?, ?, ?, ?)');
+            $stmt = db()->prepare('INSERT INTO users (full_name, email, phone, password_hash, is_verified) VALUES (?, ?, ?, ?, 0)');
             $stmt->execute([$fullName, $email ?: null, $phone ?: null, password_hash($password, PASSWORD_DEFAULT)]);
-            flash('success', 'Registration successful. Please login.');
-            header('Location: ' . BASE_URL . '/login.php');
+            $userId = (int)db()->lastInsertId();
+
+            $otp = create_otp_code('user', $userId, 'email_verify', 10);
+            send_otp_notice($email ?: null, $otp, 'email verification');
+
+            $_SESSION['otp_pending'] = [
+                'entity_type' => 'user',
+                'entity_id' => $userId,
+                'purpose' => 'email_verify',
+                'return_to' => BASE_URL . '/homepage.php',
+            ];
+
+            flash('success', 'Registration successful. Please verify OTP to continue.');
+            header('Location: ' . BASE_URL . '/verify-otp.php');
             exit;
         }
     }
@@ -48,7 +60,7 @@ include __DIR__ . '/header.php';
             <h1 class="h3 mb-3">Create Account</h1>
             <form method="post">
                 <div class="mb-3"><label class="form-label">Full Name</label><input name="full_name" class="form-control" required></div>
-                <div class="mb-3"><label class="form-label">Email (optional)</label><input name="email" type="email" class="form-control"></div>
+                <div class="mb-3"><label class="form-label">Email</label><input name="email" type="email" class="form-control" required></div>
                 <div class="mb-3"><label class="form-label">Phone (optional)</label><input name="phone" class="form-control"></div>
                 <div class="mb-3"><label class="form-label">Password</label><input name="password" type="password" class="form-control" required></div>
                 <div class="mb-3"><label class="form-label">Confirm Password</label><input name="confirm_password" type="password" class="form-control" required></div>

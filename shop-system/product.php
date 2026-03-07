@@ -32,7 +32,7 @@ if (!$product) {
     exit;
 }
 
-$imgStmt = db()->prepare('SELECT image_path, is_main FROM product_images WHERE product_id = ? ORDER BY is_main DESC, id ASC');
+$imgStmt = db()->prepare('SELECT id AS image_id, is_main FROM product_images WHERE product_id = ? ORDER BY is_main DESC, id ASC');
 $imgStmt->execute([$productId]);
 $images = $imgStmt->fetchAll();
 
@@ -40,7 +40,7 @@ $revStmt = db()->prepare('SELECT reviewer_name, rating, comment, created_at FROM
 $revStmt->execute([$productId]);
 $reviews = $revStmt->fetchAll();
 
-$relStmt = db()->prepare("SELECT p.*, COALESCE((SELECT ROUND(AVG(r.rating), 1) FROM reviews r WHERE r.product_id = p.id), 0) AS rating, (SELECT image_path FROM product_images pi WHERE pi.product_id = p.id ORDER BY is_main DESC, id ASC LIMIT 1) AS image_path FROM products p WHERE p.category_id = ? AND p.id <> ? ORDER BY p.is_popular DESC LIMIT 4");
+$relStmt = db()->prepare("SELECT p.*, COALESCE((SELECT ROUND(AVG(r.rating), 1) FROM reviews r WHERE r.product_id = p.id), 0) AS rating, (SELECT pi.id FROM product_images pi WHERE pi.product_id = p.id ORDER BY is_main DESC, id ASC LIMIT 1) AS image_id FROM products p WHERE p.category_id = ? AND p.id <> ? ORDER BY p.is_popular DESC LIMIT 4");
 $relStmt->execute([$product['category_id'], $productId]);
 $related = $relStmt->fetchAll();
 
@@ -54,11 +54,11 @@ include __DIR__ . '/header.php';
     <div class="row g-3">
         <div class="col-lg-2 gallery-thumbs d-flex flex-lg-column gap-2">
             <?php foreach ($images as $img): ?>
-                <img src="<?= e($img['image_path']) ?>" alt="thumbnail">
+                <img src="<?= e(image_url((int)$img['image_id'], BASE_URL . '/assets/images/model1.png')) ?>" alt="thumbnail">
             <?php endforeach; ?>
         </div>
         <div class="col-lg-4">
-            <img class="gallery-main" src="<?= e($images[0]['image_path'] ?? (BASE_URL . '/assets/images/model.png')) ?>" alt="<?= e($product['name']) ?>">
+            <img class="gallery-main" src="<?= e(image_url(isset($images[0]['image_id']) ? (int)$images[0]['image_id'] : 0, BASE_URL . '/assets/images/model.png')) ?>" alt="<?= e($product['name']) ?>">
         </div>
         <div class="col-lg-6">
             <h1 class="h2 fw-bold mb-2"><?= e(strtoupper($product['name'])) ?>
@@ -127,7 +127,7 @@ include __DIR__ . '/header.php';
             <div class="col-6 col-md-3">
                 <a class="text-decoration-none text-dark" href="<?= BASE_URL ?>/product.php?id=<?= (int)$rp['id'] ?>">
                     <article class="product-card">
-                        <img src="<?= e($rp['image_path'] ?: (BASE_URL . '/assets/images/model1.png')) ?>" alt="<?= e($rp['name']) ?>">
+                        <img src="<?= e(image_url(isset($rp['image_id']) ? (int)$rp['image_id'] : 0, BASE_URL . '/assets/images/model1.png')) ?>" alt="<?= e($rp['name']) ?>">
                         <h6><?= e($rp['name']) ?></h6>
                         <div class="rating"><?= e(render_stars((float)$rp['rating'])) ?> <?= e((string)$rp['rating']) ?></div>
                         <div><strong>$<?= number_format((float)$rp['price'], 0) ?></strong></div>

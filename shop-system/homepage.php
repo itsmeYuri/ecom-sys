@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . '/includes/functions.php';
 
-$newArrivals = db()->query("SELECT p.*, COALESCE((SELECT ROUND(AVG(r.rating), 1) FROM reviews r WHERE r.product_id = p.id), 0) AS rating, (SELECT image_path FROM product_images pi WHERE pi.product_id = p.id ORDER BY is_main DESC, id ASC LIMIT 1) AS image_path FROM products p ORDER BY p.id ASC LIMIT 4")->fetchAll();
-$topSelling = db()->query("SELECT p.*, COALESCE((SELECT ROUND(AVG(r.rating), 1) FROM reviews r WHERE r.product_id = p.id), 0) AS rating, (SELECT image_path FROM product_images pi WHERE pi.product_id = p.id ORDER BY is_main DESC, id ASC LIMIT 1) AS image_path FROM products p ORDER BY p.id DESC LIMIT 4")->fetchAll();
+$newArrivals = db()->query("SELECT p.*, COALESCE((SELECT ROUND(AVG(r.rating), 1) FROM reviews r WHERE r.product_id = p.id), 0) AS rating, (SELECT pi.id FROM product_images pi WHERE pi.product_id = p.id ORDER BY is_main DESC, id ASC LIMIT 1) AS image_id FROM products p ORDER BY p.id ASC LIMIT 4")->fetchAll();
+$topSelling = db()->query("SELECT p.*, COALESCE((SELECT ROUND(AVG(r.rating), 1) FROM reviews r WHERE r.product_id = p.id), 0) AS rating, (SELECT pi.id FROM product_images pi WHERE pi.product_id = p.id ORDER BY is_main DESC, id ASC LIMIT 1) AS image_id FROM products p ORDER BY p.id DESC LIMIT 4")->fetchAll();
 
 function index_stars(float $rating): string {
     $full = (int)round($rating);
@@ -80,7 +80,7 @@ function index_stars(float $rating): string {
           <?php foreach ($newArrivals as $product): ?>
             <a class="card-link" href="<?= BASE_URL ?>/product.php?id=<?= (int)$product['id'] ?>">
               <article class="card">
-                <img class="card-img" src="<?= e($product['image_path'] ?: (BASE_URL . '/assets/images/model1.png')) ?>" alt="<?= e($product['name']) ?>" />
+                <img class="card-img" src="<?= e(image_url(isset($product['image_id']) ? (int)$product['image_id'] : 0, BASE_URL . '/assets/images/model1.png')) ?>" alt="<?= e($product['name']) ?>" />
                 <div class="card-body">
                   <h3 class="card-title"><?= e($product['name']) ?> <?php if (!empty($product['is_sold'])): ?><span style="color:#b91c1c;font-size:.76rem;">SOLD</span><?php endif; ?></h3>
                   <div class="rating"><?= e(index_stars((float)$product['rating'])) ?> <?= e((string)$product['rating']) ?></div>
@@ -100,7 +100,7 @@ function index_stars(float $rating): string {
           <?php foreach ($topSelling as $product): ?>
             <a class="card-link" href="<?= BASE_URL ?>/product.php?id=<?= (int)$product['id'] ?>">
               <article class="card">
-                <img class="card-img" src="<?= e($product['image_path'] ?: (BASE_URL . '/assets/images/model1.png')) ?>" alt="<?= e($product['name']) ?>" />
+                <img class="card-img" src="<?= e(image_url(isset($product['image_id']) ? (int)$product['image_id'] : 0, BASE_URL . '/assets/images/model1.png')) ?>" alt="<?= e($product['name']) ?>" />
                 <div class="card-body">
                   <h3 class="card-title"><?= e($product['name']) ?> <?php if (!empty($product['is_sold'])): ?><span style="color:#b91c1c;font-size:.76rem;">SOLD</span><?php endif; ?></h3>
                   <div class="rating"><?= e(index_stars((float)$product['rating'])) ?> <?= e((string)$product['rating']) ?></div>

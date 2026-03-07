@@ -6,6 +6,7 @@ $isEmbeddedView = (($_GET['embed'] ?? '') === '1')
 
 $isUserLoggedIn = is_logged_in();
 $isAdminLoggedIn = is_admin_logged_in();
+$isEmployeeLoggedIn = is_employee_logged_in();
 
 // Always show promo bar when no customer session exists.
 $showPromoBar = !$isUserLoggedIn;
@@ -53,6 +54,9 @@ $categoriesNav = get_categories();
                 <?php if ($isUserLoggedIn): ?>
                     <a href="<?= BASE_URL ?>/profile.php" class="icon-link" title="My Profile">&#128100;</a>
                     <a href="<?= BASE_URL ?>/logout.php" class="icon-link" title="Logout">&#10140;</a>
+                <?php elseif ($isEmployeeLoggedIn): ?>
+                    <a href="<?= BASE_URL ?>/employee/index.php" class="icon-link" title="Employee Dashboard">&#128100;</a>
+                    <a href="<?= BASE_URL ?>/employee/logout.php" class="icon-link" title="Employee Logout">&#10140;</a>
                 <?php elseif ($isAdminLoggedIn): ?>
                     <a href="<?= BASE_URL ?>/admin/index.php" class="icon-link" title="Admin Dashboard">&#128100;</a>
                     <a href="<?= BASE_URL ?>/admin/logout.php" class="icon-link" title="Admin Logout">&#10140;</a>
