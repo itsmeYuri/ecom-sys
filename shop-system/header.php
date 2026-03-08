@@ -8,6 +8,10 @@ $isUserLoggedIn = is_logged_in();
 $isAdminLoggedIn = is_admin_logged_in();
 $isEmployeeLoggedIn = is_employee_logged_in();
 
+if (!$isUserLoggedIn) {
+    $_SESSION['cart'] = [];
+}
+
 // Always show promo bar when no customer session exists.
 $showPromoBar = !$isUserLoggedIn;
 $categoriesNav = get_categories();

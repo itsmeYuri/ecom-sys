@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once __DIR__ . '/../includes/functions.php';
 require_employee();
 
@@ -27,7 +27,7 @@ include __DIR__ . '/../header.php';
                 <tr>
                     <td>#<?= (int)$o['id'] ?></td>
                     <td><?= e($o['customer_name']) ?></td>
-                    <td>$<?= number_format((float)$o['total'], 2) ?></td>
+                    <td>₱<?= number_format((float)$o['total'], 2) ?></td>
                     <td><?= e($o['status']) ?></td>
                     <td><?= e($o['created_at']) ?></td>
                     <td>
@@ -47,4 +47,5 @@ include __DIR__ . '/../header.php';
     </table>
 </div>
 <?php include __DIR__ . '/../footer.php'; ?>
+
 

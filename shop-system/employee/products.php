@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once __DIR__ . '/../includes/functions.php';
 require_employee();
 
@@ -127,7 +127,7 @@ include __DIR__ . '/../header.php';
                             <td><?= (int)$p['id'] ?></td>
                             <td><?= e($p['name']) ?></td>
                             <td><?= e($p['category_name']) ?></td>
-                            <td>$<?= number_format((float)$p['price'], 2) ?></td>
+                            <td>₱<?= number_format((float)$p['price'], 2) ?></td>
                             <td>
                                 <?php if (!empty($p['is_sold'])): ?>
                                     <span class="badge text-bg-danger">SOLD</span>
@@ -157,4 +157,5 @@ include __DIR__ . '/../header.php';
     </div>
 </div>
 <?php include __DIR__ . '/../footer.php'; ?>
+
 

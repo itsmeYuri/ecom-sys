@@ -7,7 +7,32 @@ if ($productId < 1) {
     exit;
 }
 
+if (is_logged_in() && (int)($_GET['add'] ?? 0) === 1) {
+    $qtyFromGet = max(1, (int)($_GET['qty'] ?? 1));
+    $soldCheck = db()->prepare('SELECT is_sold FROM products WHERE id = ? LIMIT 1');
+    $soldCheck->execute([$productId]);
+    $soldRow = $soldCheck->fetch();
+    if (!empty($soldRow['is_sold'])) {
+        flash('warning', 'This item is marked as sold and cannot be added to cart.');
+        header('Location: ' . BASE_URL . '/product.php?id=' . $productId);
+        exit;
+    }
+
+    $_SESSION['cart'][$productId] = ($_SESSION['cart'][$productId] ?? 0) + $qtyFromGet;
+    flash('success', 'Product added to cart.');
+    header('Location: ' . BASE_URL . '/cart.php');
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'add_to_cart') {
+    if (!is_logged_in()) {
+        flash('warning', 'Please login first to add items to your cart.');
+        $qty = max(1, (int)($_POST['quantity'] ?? 1));
+        $returnTo = urlencode('/product.php?id=' . $productId . '&add=1&qty=' . $qty);
+        header('Location: ' . BASE_URL . '/login.php?return_to=' . $returnTo);
+        exit;
+    }
+
     $soldCheck = db()->prepare('SELECT is_sold FROM products WHERE id = ? LIMIT 1');
     $soldCheck->execute([$productId]);
     $soldRow = $soldCheck->fetch();
@@ -49,42 +74,62 @@ $sizes = array_filter(array_map('trim', explode(',', $product['sizes'])));
 
 include __DIR__ . '/header.php';
 ?>
-<div class="small text-muted mb-2">Home &gt; Shop &gt; <?= e($product['name']) ?></div>
-<div class="detail-box p-3 p-md-4">
-    <div class="row g-3">
-        <div class="col-lg-2 gallery-thumbs d-flex flex-lg-column gap-2">
-            <?php foreach ($images as $img): ?>
-                <img src="<?= e(image_url((int)$img['image_id'], BASE_URL . '/assets/images/model1.png')) ?>" alt="thumbnail">
-            <?php endforeach; ?>
-        </div>
-        <div class="col-lg-4">
-            <img class="gallery-main" src="<?= e(image_url(isset($images[0]['image_id']) ? (int)$images[0]['image_id'] : 0, BASE_URL . '/assets/images/model.png')) ?>" alt="<?= e($product['name']) ?>">
-        </div>
-        <div class="col-lg-6">
-            <h1 class="h2 fw-bold mb-2"><?= e(strtoupper($product['name'])) ?>
-                <?php if (!empty($product['is_sold'])): ?>
-                    <span class="badge text-bg-danger align-middle">SOLD</span>
-                <?php endif; ?>
-            </h1>
-            <div class="rating mb-2"><?= e(render_stars((float)$product['rating'])) ?> <?= e((string)$product['rating']) ?>/5</div>
-            <h3 class="mb-2 fw-bold">$<?= number_format((float)$product['price'], 0) ?>
-                <?php if (!empty($product['old_price'])): ?>
-                    <span class="old-price">$<?= number_format((float)$product['old_price'], 0) ?></span>
-                <?php endif; ?>
-            </h3>
-            <p class="text-muted small"><?= e($product['description']) ?></p>
+<div class="product-page">
+    <div class="small text-muted mb-3">Home &gt; Shop &gt; Men &gt; T-shirts</div>
 
-            <div class="mb-2"><span class="small text-muted">Select Colors</span><br>
-                <?php foreach ($colors as $i => $color): ?>
-                    <span class="size-pill <?= $i === 0 ? 'active' : '' ?>"><?= e($color) ?></span>
+    <div class="product-top">
+        <div class="product-gallery">
+            <div class="gallery-thumbs d-flex flex-column gap-2">
+                <?php foreach ($images as $img): ?>
+                    <img src="<?= e(image_url((int)$img['image_id'], BASE_URL . '/assets/images/model1.png')) ?>" alt="thumbnail">
                 <?php endforeach; ?>
             </div>
-            <div class="mb-3"><span class="small text-muted">Choose Size</span><br>
+            <div class="product-main-image">
+                <img class="gallery-main" src="<?= e(image_url(isset($images[0]['image_id']) ? (int)$images[0]['image_id'] : 0, BASE_URL . '/assets/images/model.png')) ?>" alt="<?= e($product['name']) ?>">
+            </div>
+        </div>
+
+        <div class="product-summary">
+            <h1 class="product-name"><?= e($product['name']) ?>
+                <?php if (!empty($product['is_sold'])): ?>
+                    <span class="badge text-bg-danger align-middle ms-1">SOLD</span>
+                <?php endif; ?>
+            </h1>
+            <div class="product-rating-line">
+                <span class="rating"><?= e(render_stars((float)$product['rating'])) ?></span>
+                <span class="rating-score"><?= e((string)$product['rating']) ?>/5</span>
+            </div>
+
+            <div class="product-price-line">
+                <strong class="current-price">₱<?= number_format((float)$product['price'], 0) ?></strong>
+                <?php if (!empty($product['old_price'])): ?>
+                    <span class="old-price">₱<?= number_format((float)$product['old_price'], 0) ?></span>
+                    <?php $discountPct = (int)round((1 - ((float)$product['price'] / (float)$product['old_price'])) * 100); ?>
+                    <?php if ($discountPct > 0): ?>
+                        <span class="discount-pill">-<?= $discountPct ?>%</span>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </div>
+
+            <p class="product-desc"><?= e($product['description']) ?></p>
+            <div class="product-divider"></div>
+
+            <div class="small text-muted mb-2">Select Colors</div>
+            <div class="d-flex gap-2 mb-3">
+                <?php foreach ($colors as $i => $color): ?>
+                    <span class="color-swatch <?= $i === 0 ? 'active' : '' ?>" style="background: <?= e($color) ?>;" title="<?= e($color) ?>"></span>
+                <?php endforeach; ?>
+            </div>
+
+            <div class="product-divider"></div>
+            <div class="small text-muted mb-2">Choose Size</div>
+            <div class="mb-3">
                 <?php foreach ($sizes as $i => $size): ?>
                     <span class="size-pill <?= strtolower($size) === 'large' || $i === 0 ? 'active' : '' ?>"><?= e($size) ?></span>
                 <?php endforeach; ?>
             </div>
 
+            <div class="product-divider"></div>
             <?php if (!empty($product['is_sold'])): ?>
                 <button class="btn btn-secondary px-5" disabled>Sold Out</button>
             <?php else: ?>
@@ -95,22 +140,34 @@ include __DIR__ . '/header.php';
                         <input type="number" min="1" name="quantity" value="1">
                         <button type="button">+</button>
                     </div>
-                    <button class="btn btn-dark px-5">Add to Cart</button>
+                    <button class="btn btn-dark product-add-btn">Add to Cart</button>
                 </form>
             <?php endif; ?>
         </div>
     </div>
 
-    <hr class="my-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 class="m-0">All Reviews <span class="text-muted small">(<?= count($reviews) ?>)</span></h4>
-        <button class="btn btn-dark btn-sm">Write a Review</button>
+    <div class="product-tabs mt-4">
+        <button type="button">Product Details</button>
+        <button type="button" class="active">Rating & Reviews</button>
+        <button type="button">FAQs</button>
     </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3 mt-3 flex-wrap gap-2">
+        <h4 class="m-0">All Reviews <span class="text-muted small">(<?= count($reviews) ?>)</span></h4>
+        <div class="d-flex align-items-center gap-2">
+            <button class="review-filter-btn" type="button">Latest</button>
+            <button class="btn btn-dark btn-sm">Write a Review</button>
+        </div>
+    </div>
+
     <div class="row g-3">
         <?php foreach ($reviews as $review): ?>
             <div class="col-md-6">
                 <div class="review-card">
-                    <div class="rating mb-1"><?= e(render_stars((float)$review['rating'])) ?></div>
+                    <div class="d-flex justify-content-between align-items-start mb-1">
+                        <div class="rating"><?= e(render_stars((float)$review['rating'])) ?></div>
+                        <span class="text-muted small">•••</span>
+                    </div>
                     <strong><?= e($review['reviewer_name']) ?></strong>
                     <p class="small text-muted mb-1"><?= e($review['comment']) ?></p>
                     <small class="text-muted">Posted on <?= e(date('F d, Y', strtotime($review['created_at']))) ?></small>
@@ -118,19 +175,27 @@ include __DIR__ . '/header.php';
             </div>
         <?php endforeach; ?>
     </div>
+    <div class="text-center mt-3">
+        <button class="load-more-btn" type="button">Load More Reviews</button>
+    </div>
 </div>
 
-<section class="mt-4">
-    <h4 class="section-title">YOU MIGHT ALSO LIKE</h4>
+<section class="mt-5">
+    <h4 class="section-title product-related-title">You might also like</h4>
     <div class="row g-3">
         <?php foreach ($related as $rp): ?>
             <div class="col-6 col-md-3">
                 <a class="text-decoration-none text-dark" href="<?= BASE_URL ?>/product.php?id=<?= (int)$rp['id'] ?>">
-                    <article class="product-card">
+                    <article class="product-card product-card-related">
                         <img src="<?= e(image_url(isset($rp['image_id']) ? (int)$rp['image_id'] : 0, BASE_URL . '/assets/images/model1.png')) ?>" alt="<?= e($rp['name']) ?>">
                         <h6><?= e($rp['name']) ?></h6>
-                        <div class="rating"><?= e(render_stars((float)$rp['rating'])) ?> <?= e((string)$rp['rating']) ?></div>
-                        <div><strong>$<?= number_format((float)$rp['price'], 0) ?></strong></div>
+                        <div class="rating"><?= e(render_stars((float)$rp['rating'])) ?> <span class="text-muted"><?= e((string)$rp['rating']) ?>/5</span></div>
+                        <div class="d-flex align-items-center gap-2">
+                            <strong>₱<?= number_format((float)$rp['price'], 0) ?></strong>
+                            <?php if (!empty($rp['old_price'])): ?>
+                                <span class="old-price">₱<?= number_format((float)$rp['old_price'], 0) ?></span>
+                            <?php endif; ?>
+                        </div>
                     </article>
                 </a>
             </div>

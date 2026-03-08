@@ -9,6 +9,8 @@ function index_stars(float $rating): string {
     $full = max(0, min(5, $full));
     return str_repeat('?', $full) . str_repeat('?', 5 - $full);
 }
+
+$showPromoBar = !is_logged_in();
 ?>
 <!doctype html>
 <html lang="en">
@@ -22,6 +24,16 @@ function index_stars(float $rating): string {
   <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/index-reference.css" />
 </head>
 <body>
+  <?php if ($showPromoBar): ?>
+  <div class="promo-bar" id="promoBar">
+    <div class="container promo-inner">
+      <span>Sign up and get 20% off to your first order.</span>
+      <a href="<?= BASE_URL ?>/register.php">Sign Up Now</a>
+      <button class="promo-close" id="promoClose" aria-label="Close">&times;</button>
+    </div>
+  </div>
+  <?php endif; ?>
+
   <header class="navbar">
     <div class="container nav-inner">
       <div class="logo">
@@ -46,7 +58,7 @@ function index_stars(float $rating): string {
       <section class="hero">
         <div>
           <h1>FIND CLOTHES THAT MATCHES YOUR STYLE</h1>
-          <p>Browse unique vintage finds and budget-friendly treasures made for everyday confidence. Discover one-of-a-kind pieces, timeless classics, and hidden gems curated to elevate your personal look — sustainably and affordably.</p>
+          <p>Browse unique vintage finds and budget-friendly treasures made for everyday confidence. Discover one-of-a-kind pieces, timeless classics, and hidden gems curated to elevate your personal look - sustainably and affordably.</p>
           <a href="<?= BASE_URL ?>/shop.php" class="btn-dark">Shop Now</a>
         </div>
         <div class="hero-image">
@@ -58,7 +70,7 @@ function index_stars(float $rating): string {
     <div class="brand-strip">
       <div class="container brand-row">
         <span>Champion</span>
-        <span>Levi’s</span>
+        <span>Levi's</span>
         <span>Nike</span>
         <span>Adidas</span>
         <span>Tommy Hilfiger</span>
@@ -84,7 +96,7 @@ function index_stars(float $rating): string {
                 <div class="card-body">
                   <h3 class="card-title"><?= e($product['name']) ?> <?php if (!empty($product['is_sold'])): ?><span style="color:#b91c1c;font-size:.76rem;">SOLD</span><?php endif; ?></h3>
                   <div class="rating"><?= e(index_stars((float)$product['rating'])) ?> <?= e((string)$product['rating']) ?></div>
-                  <div class="price"><span class="new">$<?= number_format((float)$product['price'], 0) ?></span><?php if (!empty($product['old_price'])): ?><span class="old">$<?= number_format((float)$product['old_price'], 0) ?></span><?php endif; ?></div>
+                  <div class="price"><span class="new">₱<?= number_format((float)$product['price'], 0) ?></span><?php if (!empty($product['old_price'])): ?><span class="old">₱<?= number_format((float)$product['old_price'], 0) ?></span><?php endif; ?></div>
                 </div>
               </article>
             </a>
@@ -104,7 +116,7 @@ function index_stars(float $rating): string {
                 <div class="card-body">
                   <h3 class="card-title"><?= e($product['name']) ?> <?php if (!empty($product['is_sold'])): ?><span style="color:#b91c1c;font-size:.76rem;">SOLD</span><?php endif; ?></h3>
                   <div class="rating"><?= e(index_stars((float)$product['rating'])) ?> <?= e((string)$product['rating']) ?></div>
-                  <div class="price"><span class="new">$<?= number_format((float)$product['price'], 0) ?></span><?php if (!empty($product['old_price'])): ?><span class="old">$<?= number_format((float)$product['old_price'], 0) ?></span><?php endif; ?></div>
+                  <div class="price"><span class="new">₱<?= number_format((float)$product['price'], 0) ?></span><?php if (!empty($product['old_price'])): ?><span class="old">₱<?= number_format((float)$product['old_price'], 0) ?></span><?php endif; ?></div>
                 </div>
               </article>
             </a>
@@ -117,10 +129,10 @@ function index_stars(float $rating): string {
       <div class="container styles-wrap">
         <h2 class="section-title">BROWSE BY DRESS STYLE</h2>
         <div class="styles-grid">
-          <a class="style-card" href="<?= BASE_URL ?>/shop.php"><img src="<?= BASE_URL ?>/assets/images/model1.png" alt="CASUAL" /><span>CASUAL</span></a>
-          <a class="style-card" href="<?= BASE_URL ?>/shop.php"><img src="<?= BASE_URL ?>/assets/images/model.png" alt="FORMAL" /><span>FORMAL</span></a>
-          <a class="style-card" href="<?= BASE_URL ?>/shop.php"><img src="<?= BASE_URL ?>/assets/images/model1.png" alt="PARTY" /><span>PARTY</span></a>
-          <a class="style-card" href="<?= BASE_URL ?>/shop.php"><img src="<?= BASE_URL ?>/assets/images/model.png" alt="GYM" /><span>GYM</span></a>
+          <a class="style-card style-casual" href="<?= BASE_URL ?>/shop.php"><img src="<?= BASE_URL ?>/assets/images/casual.png" alt="Casual" /><span>Casual</span></a>
+          <a class="style-card style-formal" href="<?= BASE_URL ?>/shop.php"><img src="<?= BASE_URL ?>/assets/images/formal.png" alt="Formal" /><span>Formal</span></a>
+          <a class="style-card style-party" href="<?= BASE_URL ?>/shop.php"><img src="<?= BASE_URL ?>/assets/images/party.png" alt="Party" /><span>Party</span></a>
+          <a class="style-card style-gym" href="<?= BASE_URL ?>/shop.php"><img src="<?= BASE_URL ?>/assets/images/gym.png" alt="Gym" /><span>Gym</span></a>
         </div>
       </div>
     </section>
@@ -178,7 +190,9 @@ function index_stars(float $rating): string {
       </div>
     </div>
   </footer>
+  <script src="<?= BASE_URL ?>/assets/js/app.js"></script>
 </body>
 </html>
+
 
 

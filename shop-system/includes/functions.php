@@ -181,6 +181,9 @@ function get_flashes(): array {
 }
 
 function cart_items_count(): int {
+    if (!is_logged_in()) {
+        return 0;
+    }
     return array_sum($_SESSION['cart'] ?? []);
 }
 

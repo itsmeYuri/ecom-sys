@@ -91,8 +91,8 @@ include __DIR__ . '/header.php';
                 <div class="mb-3">
                     <label class="form-label small fw-semibold">Price</label>
                     <div class="row g-2">
-                        <div class="col"><input class="form-control form-control-sm" type="number" name="min_price" placeholder="$50" value="<?= e((string)($_GET['min_price'] ?? '')) ?>"></div>
-                        <div class="col"><input class="form-control form-control-sm" type="number" name="max_price" placeholder="$200" value="<?= e((string)($_GET['max_price'] ?? '')) ?>"></div>
+                        <div class="col"><input class="form-control form-control-sm" type="number" name="min_price" placeholder="₱50" value="<?= e((string)($_GET['min_price'] ?? '')) ?>"></div>
+                        <div class="col"><input class="form-control form-control-sm" type="number" name="max_price" placeholder="₱200" value="<?= e((string)($_GET['max_price'] ?? '')) ?>"></div>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -136,9 +136,9 @@ include __DIR__ . '/header.php';
                             <img src="<?= e(image_url(isset($product['image_id']) ? (int)$product['image_id'] : 0, BASE_URL . '/assets/images/model1.png')) ?>" alt="<?= e($product['name']) ?>">
                             <h6><?= e($product['name']) ?> <?php if (!empty($product['is_sold'])): ?><span class="badge text-bg-danger">SOLD</span><?php endif; ?></h6>
                             <div class="rating"><?= e(render_stars((float)$product['rating'])) ?> <?= e((string)$product['rating']) ?></div>
-                            <div><strong>$<?= number_format((float)$product['price'], 0) ?></strong>
+                            <div><strong>₱<?= number_format((float)$product['price'], 0) ?></strong>
                                 <?php if (!empty($product['old_price'])): ?>
-                                    <span class="old-price">$<?= number_format((float)$product['old_price'], 0) ?></span>
+                                    <span class="old-price">₱<?= number_format((float)$product['old_price'], 0) ?></span>
                                 <?php endif; ?>
                             </div>
                         </article>
@@ -159,3 +159,4 @@ include __DIR__ . '/header.php';
     </section>
 </div>
 <?php include __DIR__ . '/footer.php'; ?>
+

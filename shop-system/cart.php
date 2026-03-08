@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/includes/functions.php';
+require_login();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
@@ -40,7 +41,7 @@ include __DIR__ . '/header.php';
                             <h5 class="h6 mb-1 fw-bold"><?= e($item['name']) ?></h5>
                             <div class="small text-muted">Size: Large</div>
                             <div class="small text-muted">Color: White</div>
-                            <div class="fw-bold fs-4 mt-1">$<?= number_format((float)$item['price'], 0) ?></div>
+                            <div class="fw-bold fs-4 mt-1">₱<?= number_format((float)$item['price'], 0) ?></div>
                         </div>
                         <div class="col-8 col-md-3">
                             <form method="post" class="d-flex align-items-center gap-2">
@@ -70,11 +71,11 @@ include __DIR__ . '/header.php';
     <div class="col-lg-5">
         <div class="summary-box p-4">
             <h3 class="h4 fw-bold mb-3">Order Summary</h3>
-            <p class="d-flex justify-content-between"><span class="text-muted">Subtotal</span><strong>$<?= number_format($totals['subtotal'], 0) ?></strong></p>
-            <p class="d-flex justify-content-between"><span class="text-muted">Discount (-20%)</span><strong class="text-danger">-$<?= number_format($totals['discount'], 0) ?></strong></p>
-            <p class="d-flex justify-content-between"><span class="text-muted">Delivery Fee</span><strong>$<?= number_format($totals['delivery'], 0) ?></strong></p>
+            <p class="d-flex justify-content-between"><span class="text-muted">Subtotal</span><strong>₱<?= number_format($totals['subtotal'], 0) ?></strong></p>
+            <p class="d-flex justify-content-between"><span class="text-muted">Discount (-20%)</span><strong class="text-danger">-₱<?= number_format($totals['discount'], 0) ?></strong></p>
+            <p class="d-flex justify-content-between"><span class="text-muted">Delivery Fee</span><strong>₱<?= number_format($totals['delivery'], 0) ?></strong></p>
             <hr>
-            <p class="d-flex justify-content-between fs-5"><span>Total</span><strong>$<?= number_format($totals['total'], 0) ?></strong></p>
+            <p class="d-flex justify-content-between fs-5"><span>Total</span><strong>₱<?= number_format($totals['total'], 0) ?></strong></p>
             <div class="d-flex gap-2 mb-3">
                 <input class="form-control" placeholder="Add promo code">
                 <button class="btn btn-outline-dark">Apply</button>
@@ -84,3 +85,4 @@ include __DIR__ . '/header.php';
     </div>
 </div>
 <?php include __DIR__ . '/footer.php'; ?>
+

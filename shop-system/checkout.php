@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once __DIR__ . '/includes/functions.php';
 require_login();
 
@@ -56,7 +56,7 @@ include __DIR__ . '/header.php';
                 <?php foreach ($products as $item): ?>
                     <li class="list-group-item d-flex justify-content-between">
                         <span><?= e($item['name']) ?> x <?= (int)$item['quantity'] ?></span>
-                        <span>$<?= number_format((float)$item['line_total'], 2) ?></span>
+                        <span>₱<?= number_format((float)$item['line_total'], 2) ?></span>
                     </li>
                 <?php endforeach; ?>
             </ul>
@@ -65,11 +65,11 @@ include __DIR__ . '/header.php';
     <div class="col-lg-4">
         <div class="summary-box p-3">
             <h5>Payment Summary</h5>
-            <p class="d-flex justify-content-between"><span>Subtotal</span><span>$<?= number_format($totals['subtotal'], 2) ?></span></p>
-            <p class="d-flex justify-content-between text-danger"><span>Discount</span><span>-$<?= number_format($totals['discount'], 2) ?></span></p>
-            <p class="d-flex justify-content-between"><span>Delivery</span><span>$<?= number_format($totals['delivery'], 2) ?></span></p>
+            <p class="d-flex justify-content-between"><span>Subtotal</span><span>₱<?= number_format($totals['subtotal'], 2) ?></span></p>
+            <p class="d-flex justify-content-between text-danger"><span>Discount</span><span>-₱<?= number_format($totals['discount'], 2) ?></span></p>
+            <p class="d-flex justify-content-between"><span>Delivery</span><span>₱<?= number_format($totals['delivery'], 2) ?></span></p>
             <hr>
-            <p class="d-flex justify-content-between fw-bold"><span>Total</span><span>$<?= number_format($totals['total'], 2) ?></span></p>
+            <p class="d-flex justify-content-between fw-bold"><span>Total</span><span>₱<?= number_format($totals['total'], 2) ?></span></p>
             <form method="post">
                 <button class="btn btn-dark w-100">Place Order</button>
             </form>
@@ -77,4 +77,5 @@ include __DIR__ . '/header.php';
     </div>
 </div>
 <?php include __DIR__ . '/footer.php'; ?>
+
 

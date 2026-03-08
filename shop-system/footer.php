@@ -14,12 +14,18 @@
         <div class="row g-4 footer-links">
             <div class="col-md-4">
                 <h5 class="fw-bold">Threap Glailz</h5>
-                <p class="text-muted small">We have clothes that suit your style and your budget.</p>
+                <p class="text-muted small">We handpick stylish thrift finds that look premium without the premium price.</p>
+                <div class="socials mt-3" aria-label="Social media links">
+                    <span>in</span>
+                    <span>ig</span>
+                    <span>fb</span>
+                    <span>x</span>
+                </div>
             </div>
-            <div class="col-6 col-md-2"><h6>Company</h6><p class="small text-muted">About<br>Features<br>Works</p></div>
-            <div class="col-6 col-md-2"><h6>Help</h6><p class="small text-muted">Support<br>Delivery<br>Terms</p></div>
-            <div class="col-6 col-md-2"><h6>FAQ</h6><p class="small text-muted">Account<br>Orders<br>Payments</p></div>
-            <div class="col-6 col-md-2"><h6>Resources</h6><p class="small text-muted">Blogs<br>Tutorials<br>eBooks</p></div>
+            <div class="col-6 col-md-2"><h6>Company</h6><p class="small text-muted">About<br>Features<br>Works<br>Career</p></div>
+            <div class="col-6 col-md-2"><h6>Help</h6><p class="small text-muted">Customer Support<br>Delivery Details<br>Terms &amp; Conditions<br>Privacy Policy</p></div>
+            <div class="col-6 col-md-2"><h6>FAQ</h6><p class="small text-muted">Account<br>Manage Deliveries<br>Orders<br>Payments</p></div>
+            <div class="col-6 col-md-2"><h6>Resources</h6><p class="small text-muted">Free eBooks<br>Development Tutorial<br>How to Blog<br>YouTube Playlist</p></div>
         </div>
     </div>
 </footer>

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once __DIR__ . '/includes/functions.php';
 require_login();
 
@@ -40,7 +40,7 @@ include __DIR__ . '/header.php';
                     <?php foreach ($orders as $order): ?>
                         <tr>
                             <td>#<?= (int)$order['id'] ?></td>
-                            <td>$<?= number_format((float)$order['total'], 2) ?></td>
+                            <td>₱<?= number_format((float)$order['total'], 2) ?></td>
                             <td><?= e($order['status']) ?></td>
                             <td><?= e(date('M d, Y', strtotime($order['created_at']))) ?></td>
                         </tr>
@@ -52,3 +52,4 @@ include __DIR__ . '/header.php';
     </div>
 </div>
 <?php include __DIR__ . '/footer.php'; ?>
+
