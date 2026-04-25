@@ -195,14 +195,18 @@ function get_product_main_image(int $productId): ?string {
     $stmt = db()->prepare('SELECT id FROM product_images WHERE product_id = ? ORDER BY is_main DESC, id ASC LIMIT 1');
     $stmt->execute([$productId]);
     $row = $stmt->fetch();
-    return !empty($row['id']) ? (BASE_URL . '/image.php?id=' . (int)$row['id']) : null;
+    return !empty($row['id']) ? (BASE_URL . '/image.php?id=' . (int)$row['id']) : fallback_image_url();
+}
+
+function fallback_image_url(): string {
+    return BASE_URL . '/assets/images/model.png';
 }
 
 function image_url(?int $imageId, string $fallback = ''): string {
     if (!empty($imageId)) {
         return BASE_URL . '/image.php?id=' . (int)$imageId;
     }
-    return $fallback;
+    return $fallback !== '' ? $fallback : fallback_image_url();
 }
 
 function get_cart_products(): array {

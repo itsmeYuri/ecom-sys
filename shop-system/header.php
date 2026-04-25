@@ -7,13 +7,15 @@ $isEmbeddedView = (($_GET['embed'] ?? '') === '1')
 $isUserLoggedIn = is_logged_in();
 $isAdminLoggedIn = is_admin_logged_in();
 $isEmployeeLoggedIn = is_employee_logged_in();
+$isBackOfficeView = $isAdminLoggedIn || $isEmployeeLoggedIn;
 
 if (!$isUserLoggedIn) {
     $_SESSION['cart'] = [];
 }
 
-// Always show promo bar when no customer session exists.
-$showPromoBar = !$isUserLoggedIn;
+// Show storefront chrome only on the customer-facing side.
+$showStorefrontHeader = !$isEmbeddedView && !$isBackOfficeView;
+$showPromoBar = $showStorefrontHeader && !$isUserLoggedIn;
 $categoriesNav = get_categories();
 ?>
 <!doctype html>
@@ -26,7 +28,7 @@ $categoriesNav = get_categories();
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css">
 </head>
 <body>
-<?php if (!$isEmbeddedView && $showPromoBar): ?>
+<?php if ($showPromoBar): ?>
 <div class="promo-bar" id="promoBar">
     <div class="container d-flex justify-content-center align-items-center gap-2 position-relative">
         <span>Sign up and get 20% off your first order.</span>
@@ -36,7 +38,7 @@ $categoriesNav = get_categories();
 </div>
 <?php endif; ?>
 
-<?php if (!$isEmbeddedView): ?>
+<?php if ($showStorefrontHeader): ?>
 <header class="sticky-top bg-white main-header">
     <nav class="container navbar navbar-expand-lg py-3">
         <a class="navbar-brand fw-bold" href="<?= BASE_URL ?>/homepage.php">Threap Glailz</a>

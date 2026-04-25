@@ -81,11 +81,11 @@ include __DIR__ . '/header.php';
         <div class="product-gallery">
             <div class="gallery-thumbs d-flex flex-column gap-2">
                 <?php foreach ($images as $img): ?>
-                    <img src="<?= e(image_url((int)$img['image_id'], BASE_URL . '/assets/images/model1.png')) ?>" alt="thumbnail">
+                    <img src="<?= e(image_url((int)$img['image_id'], fallback_image_url())) ?>" alt="thumbnail">
                 <?php endforeach; ?>
             </div>
             <div class="product-main-image">
-                <img class="gallery-main" src="<?= e(image_url(isset($images[0]['image_id']) ? (int)$images[0]['image_id'] : 0, BASE_URL . '/assets/images/model.png')) ?>" alt="<?= e($product['name']) ?>">
+                <img class="gallery-main" src="<?= e(image_url(isset($images[0]['image_id']) ? (int)$images[0]['image_id'] : 0, fallback_image_url())) ?>" alt="<?= e($product['name']) ?>">
             </div>
         </div>
 
@@ -187,7 +187,7 @@ include __DIR__ . '/header.php';
             <div class="col-6 col-md-3">
                 <a class="text-decoration-none text-dark" href="<?= BASE_URL ?>/product.php?id=<?= (int)$rp['id'] ?>">
                     <article class="product-card product-card-related">
-                        <img src="<?= e(image_url(isset($rp['image_id']) ? (int)$rp['image_id'] : 0, BASE_URL . '/assets/images/model1.png')) ?>" alt="<?= e($rp['name']) ?>">
+                        <img src="<?= e(image_url(isset($rp['image_id']) ? (int)$rp['image_id'] : 0, fallback_image_url())) ?>" alt="<?= e($rp['name']) ?>">
                         <h6><?= e($rp['name']) ?></h6>
                         <div class="rating"><?= e(render_stars((float)$rp['rating'])) ?> <span class="text-muted"><?= e((string)$rp['rating']) ?>/5</span></div>
                         <div class="d-flex align-items-center gap-2">

@@ -92,7 +92,7 @@ $showPromoBar = !is_logged_in();
           <?php foreach ($newArrivals as $product): ?>
             <a class="card-link" href="<?= BASE_URL ?>/product.php?id=<?= (int)$product['id'] ?>">
               <article class="card">
-                <img class="card-img" src="<?= e(image_url(isset($product['image_id']) ? (int)$product['image_id'] : 0, BASE_URL . '/assets/images/model1.png')) ?>" alt="<?= e($product['name']) ?>" />
+                <img class="card-img" src="<?= e(image_url(isset($product['image_id']) ? (int)$product['image_id'] : 0, fallback_image_url())) ?>" alt="<?= e($product['name']) ?>" />
                 <div class="card-body">
                   <h3 class="card-title"><?= e($product['name']) ?> <?php if (!empty($product['is_sold'])): ?><span style="color:#b91c1c;font-size:.76rem;">SOLD</span><?php endif; ?></h3>
                   <div class="rating"><?= e(index_stars((float)$product['rating'])) ?> <?= e((string)$product['rating']) ?></div>
@@ -112,7 +112,7 @@ $showPromoBar = !is_logged_in();
           <?php foreach ($topSelling as $product): ?>
             <a class="card-link" href="<?= BASE_URL ?>/product.php?id=<?= (int)$product['id'] ?>">
               <article class="card">
-                <img class="card-img" src="<?= e(image_url(isset($product['image_id']) ? (int)$product['image_id'] : 0, BASE_URL . '/assets/images/model1.png')) ?>" alt="<?= e($product['name']) ?>" />
+                <img class="card-img" src="<?= e(image_url(isset($product['image_id']) ? (int)$product['image_id'] : 0, fallback_image_url())) ?>" alt="<?= e($product['name']) ?>" />
                 <div class="card-body">
                   <h3 class="card-title"><?= e($product['name']) ?> <?php if (!empty($product['is_sold'])): ?><span style="color:#b91c1c;font-size:.76rem;">SOLD</span><?php endif; ?></h3>
                   <div class="rating"><?= e(index_stars((float)$product['rating'])) ?> <?= e((string)$product['rating']) ?></div>

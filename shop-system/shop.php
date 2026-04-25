@@ -133,7 +133,7 @@ include __DIR__ . '/header.php';
                 <div class="col-6 col-md-4">
                     <a class="text-decoration-none text-dark" href="<?= BASE_URL ?>/product.php?id=<?= (int)$product['id'] ?>">
                         <article class="product-card">
-                            <img src="<?= e(image_url(isset($product['image_id']) ? (int)$product['image_id'] : 0, BASE_URL . '/assets/images/model1.png')) ?>" alt="<?= e($product['name']) ?>">
+                            <img src="<?= e(image_url(isset($product['image_id']) ? (int)$product['image_id'] : 0, fallback_image_url())) ?>" alt="<?= e($product['name']) ?>">
                             <h6><?= e($product['name']) ?> <?php if (!empty($product['is_sold'])): ?><span class="badge text-bg-danger">SOLD</span><?php endif; ?></h6>
                             <div class="rating"><?= e(render_stars((float)$product['rating'])) ?> <?= e((string)$product['rating']) ?></div>
                             <div><strong>₱<?= number_format((float)$product['price'], 0) ?></strong>

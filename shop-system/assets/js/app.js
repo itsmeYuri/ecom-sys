@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (closeBtn) {
     closeBtn.addEventListener('click', async function () {
       try {
-        await fetch('/shop-system/promo-dismiss.php', { method: 'POST' });
+        await fetch('/ecom-sys/shop-system/promo-dismiss.php', { method: 'POST' });
       } catch (e) {
         console.error(e);
       }

@@ -26,7 +26,7 @@ define('DB_HOST', '127.0.0.1');
 define('DB_NAME', 'shop_system');
 define('DB_USER', 'root');
 define('DB_PASS', '');
-define('BASE_URL', '/shop-system');
+define('BASE_URL', '/ecom-sys/shop-system');
 
 // SMTP configuration for OTP email sending (PHPMailer)
 define('SMTP_HOST', 'smtp.gmail.com');
