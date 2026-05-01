@@ -1,0 +1,19 @@
+# Sensitive config — copy config.example.php to config.php and fill in your values
+config.php
+
+# Dependencies
+/vendor/
+/node_modules/
+
+# Logs
+*.log
+error_log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
